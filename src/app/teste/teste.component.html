@@ -1,1 +1,91 @@
-<p>teste works!</p>
+<p id="paragrafo-1" class="text-3xl font-bold">teste works!</p>
+
+<ng-template #naoDevoExibirTexto>
+  <button>Clique Aqui</button>
+</ng-template>
+
+@if (devoExibirTexto) {
+teste works
+} @else {
+<button>Clique Aqui</button>
+}
+
+<hr>
+<div class="text-center">
+  <div *ngFor="let item of numeros; let i = index">
+    <p>{{i}} - {{item}}</p>
+  </div>
+
+  <br>
+
+  <div>
+    @for(item of numeros; track item; let i = $index) {
+    <p>{{i}} - {{item}}</p>
+    }
+  </div>
+
+</div>
+
+
+<hr>
+
+<button [ngClass]="{'botao-ativo': botaoAtivo}" (click)="botaoAtivo = !botaoAtivo; scrollToTop('paragrafo-1')">
+  Clique Aqui
+</button>
+
+<hr>
+
+<div *ngFor="let item of items" class="text-center">
+  <p *ngIf="item.visible">{{item.name}}</p>
+</div>
+
+
+<hr>
+
+<!-- Estrutura ngFor com ngIf -->
+
+<ul *ngFor="let item of items" class="text-center">
+  <li *ngIf="item.visible" [ngClass]="{'text-3xl' : !item.visible} ">
+    {{item['name']}}
+  </li>
+</ul>
+
+<hr>
+
+<!-- Estrutura ngFor com ngClass -->
+
+<ul *ngFor="let item of items" class="text-center">
+  <li [ngClass]="{'text-red-600' : !item.visible}">
+    {{item.name}}
+  </li>
+</ul>
+
+<br>
+
+<ul class="text-center">
+  @for(item of items; track item) {
+  <li [ngClass]="{'text-red-600' : !item.visible}">
+    {{item.name}}
+  </li>
+  }
+</ul>
+
+<hr>
+
+<a [href]="urlGoogle" target="_blank">Navegar para Google</a>
+
+<hr>
+
+<!-- Exemplos de Pipes -->
+
+<div class="text-center pb-80">
+  <p>A data de hoje é: {{ hoje | date }}</p>
+  <p>A data de hoje é: {{ hoje | date: 'dd/MM/YYYY' }}</p>
+
+  <p>O valor do produto é: {{ 1000 | currency }}</p>
+  <p>O valor do produto é: {{ 1000 | currency: 'BRL' }}</p>
+
+  <p>O valor do produto é: {{ 120 | percent }}</p>
+
+  <p>Meu pipe customizado é: {{ 'meuPipe' | sufixoPipe }}</p>
+</div>
