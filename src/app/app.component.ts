@@ -5,13 +5,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { DataBindingComponent } from './data-binding/data-binding.component';
 import pt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { PaiComponent } from './pai/pai.component';
 
 registerLocaleData(pt);
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, DataBindingComponent, TesteComponent, MatButtonModule],
+  imports: [RouterOutlet, DataBindingComponent, TesteComponent, MatButtonModule, PaiComponent],
   providers: [
     {
       provide: LOCALE_ID, useValue: 'pt'
