@@ -1,13 +1,6 @@
-<mat-toolbar class="h-32">
-  <mat-toolbar-row
-    class="bg-[#DA5E5B] flex justify-between !h-full items-center !flex-row-reverse md:!flex-row"
-  >
-    <figure class="flex items-center gap-4 !flex-row-reverse md:!flex-row">
-      <img src="../../../assets/logo.svg" alt="logo.svg" />
-      <figcaption>Churrascometro</figcaption>
-    </figure>
-    <span class="example-spacer"></span>
-    <menu class="block md:hidden">
+<mat-toolbar class="header">
+  <mat-toolbar-row class="flex-container">
+    <menu class="mobile">
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
       </button>
@@ -16,9 +9,14 @@
         <button mat-menu-item>Item 2</button>
       </mat-menu>
     </menu>
-    <menu class="hidden md:flex">
+    <menu class="desktop">
       <button mat-menu-item>Item 1</button>
       <button mat-menu-item>Item 2</button>
     </menu>
+    <span class="example-spacer"></span>
+    <figure class="logo">
+      <figcaption>Churrascometro</figcaption>
+      <img src="../../../assets/logo.jpg" class="image" alt="barbecue logo" />
+    </figure>
   </mat-toolbar-row>
 </mat-toolbar>
