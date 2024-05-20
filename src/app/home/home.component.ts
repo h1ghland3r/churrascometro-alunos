@@ -17,8 +17,7 @@ export class HomeComponent {
 
   constructor(private scrollService: ScrollService) { }
 
-  rolarParaTopo(id: string): void {
-    console.log('rolou para o topo');
+  rolarToSection(id: string): void {
     this.scrollService.scrollToTop(id);
   }
 }

@@ -4,24 +4,43 @@ import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-preco-formulario',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatStepperModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatStepperModule, FormsModule, ReactiveFormsModule],
   templateUrl: './preco-formulario.component.html',
   styleUrl: './preco-formulario.component.scss'
 })
 export class PrecoFormularioComponent implements OnInit {
-
+  // formulário
   formPessoas!: FormGroup;
   formCarnes!: FormGroup;
   formBebidas!: FormGroup;
 
+  carnesLista = [
+    { value: 'picanha', label: 'Picanha' },
+    { value: 'costela', label: 'Costela' },
+    { value: 'linguica', label: 'Linguiça' },
+    { value: 'frango', label: 'Frango' },
+  ];
+
+  bebidasLista = [
+    { value: 'cerveja', label: 'Cerveja' },
+    { value: 'refrigerante', label: 'Refrigerante' },
+    { value: 'agua', label: 'Água' },
+    { value: 'suco', label: 'Suco' },
+  ];
+
+  exibirLoading = false;
+  exibirResultados = false;
+
+  // valores de referência
   preco_picanha = 0;
   preco_costela = 0;
   preco_linguica = 0;
@@ -49,14 +68,46 @@ export class PrecoFormularioComponent implements OnInit {
   consumo_adulto_suco = 0;
   consumo_crianca_suco = 0;
 
-  nome: string = '';
+  // nome: string = '';
+
+  // valores totais
+  adultos_total = 0;
+  criancas_total = 0;
+
+  valor_total_picanha = 0;
+  valor_total_costela = 0;
+  valor_total_linguica = 0;
+  valor_total_frango = 0;
+
+  valor_total_cerveja = 0;
+  valor_total_refrigerante = 0;
+  valor_total_agua = 0;
+  valor_total_suco = 0;
+
+  valor_total = 0;
+
 
   constructor(
     private churrascometroService: ChurrascometroService,
     private formBuilder: FormBuilder
   ) {
     this.formPessoas = this.formBuilder.group({
-      adultos: new FormControl(0)
+      adultos: new FormControl(0, [Validators.required, Validators.min(0)]),
+      criancas: new FormControl(null)
+    });
+
+    this.formCarnes = this.formBuilder.group({
+      picanha: new FormControl(null),
+      costela: new FormControl(null),
+      linguica: new FormControl(null),
+      frango: new FormControl(null)
+    });
+
+    this.formBebidas = this.formBuilder.group({
+      cerveja: new FormControl(null),
+      refrigerante: new FormControl(null),
+      agua: new FormControl(null),
+      suco: new FormControl(null)
     });
   }
 
@@ -141,9 +192,63 @@ export class PrecoFormularioComponent implements OnInit {
     ).subscribe();
   }
 
-  onSubmit(): void {
-    const name = this.nome;
-    console.log('Nome submetido: ' + name);
-  }
+  // onSubmit(): void {
+  //   const name = this.nome;
+  //   console.log('Nome submetido: ' + name);
+  // }
 
+  submit(): void {
+    if (this.formPessoas.valid && this.formCarnes.valid && this.formBebidas.valid) {
+
+      this.exibirLoading = true;
+
+      const formPessoasValues = this.formPessoas.value;
+      const formCarnesValues = this.formCarnes.value;
+      const formBebidasValues = this.formBebidas.value;
+
+      console.log(formPessoasValues);
+      console.log(formCarnesValues);
+      console.log(formBebidasValues);
+
+      // const adultos = this.formPessoas.get('adultos')?.value;
+      // const adultos = this.formPessoas.controls['adultos']?.value;
+      const adultos = formPessoasValues.adultos;
+      const criancas = formPessoasValues.criancas;
+
+      const picanha = formCarnesValues.picanha;
+      const constela = formCarnesValues.costela;
+      const linguica = formCarnesValues.linguica;
+      const frango = formCarnesValues.frango;
+
+      const cerveja = formBebidasValues.cerveja;
+      const refrigerante = formBebidasValues.refrigerante;
+      const agua = formBebidasValues.agua;
+      const suco = formBebidasValues.suco;
+
+      if (adultos) {
+        this.adultos_total = adultos;
+      }
+
+      if (criancas) {
+        this.criancas_total = criancas;
+      }
+
+      if (picanha) {
+        const consumo = (adultos * this.consumo_adulto_picanha) + (criancas + this.consumo_crianca_picanha);
+        this.valor_total_picanha = consumo / 1000 * this.preco_picanha;
+      }
+
+      if (cerveja) {
+        const consumo = (adultos * this.consumo_adulto_cerveja);
+        this.valor_total_cerveja = consumo / 1000 * this.preco_cerveja;
+      }
+
+      this.valor_total = this.valor_total_picanha + this.valor_total_cerveja;
+
+      setTimeout(() => {
+        this.exibirLoading = false;
+        this.exibirResultados = true;
+      }, 2000);
+    }
+  }
 }
