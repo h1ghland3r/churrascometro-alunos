@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { PrecoFormularioComponent } from '../preco-formulario/preco-formulario.component';
-import { ScrollService } from '../shared/services/scroll.service';
+import { PrecoFormularioComponent } from '../../shared/components/preco-formulario/preco-formulario.component';
+import { ScrollService } from '../../shared/services/scroll.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +14,9 @@ import { ScrollService } from '../shared/services/scroll.service';
 export class HomeComponent {
   welcomeMessage: string = 'Bem-vindo ao Churrascômetro!'
 
-  // #scrollService = inject(ScrollService);
+  constructor(private router: Router) { }
 
-  constructor(private scrollService: ScrollService) { }
-
-  rolarToSection(id: string): void {
-    this.scrollService.scrollToTop(id);
+  criarChurrasco(): void {
+    this.router.navigate(['churrascos/novo']);
   }
 }
